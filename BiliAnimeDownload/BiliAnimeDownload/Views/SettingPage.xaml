@@ -36,6 +36,7 @@
                         <Picker.Items>
                             <x:String>正式版</x:String>
                             <x:String>概念版</x:String>
+                            <x:String>Play版</x:String>
                         </Picker.Items>
                     </Picker>
 

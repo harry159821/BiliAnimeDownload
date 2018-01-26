@@ -1,4 +1,6 @@
 ﻿using BiliAnimeDownload.Helpers;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,10 +92,39 @@ namespace BiliAnimeDownload.Views
             Util.CheckUpdate(this, true);
         }
 
-        private void btn_SelectPath_Clicked(object sender, EventArgs e)
+        private async void btn_SelectPath_Clicked(object sender, EventArgs e)
         {
-            Util.PickFolder();
            
+            try
+            {
+                var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Storage);
+                if (status != PermissionStatus.Granted)
+                {
+                    if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Storage))
+                    {
+                        await DisplayAlert("需要文件读写权限", "读写文件需要文件读写权限", "OK");
+                    }
+
+                    var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Storage);
+                    //Best practice to always check that the key exists
+                    if (results.ContainsKey(Permission.Storage))
+                        status = results[Permission.Storage];
+                }
+
+                if (status == PermissionStatus.Granted)
+                {
+                    Util.PickFolder();
+                }
+                else if (status != PermissionStatus.Unknown)
+                {
+                    await DisplayAlert("失败", "请重试", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                 await DisplayAlert("失败", ex.Message, "OK");
+            }
         }
 
         private void btn_DefaultPath_Clicked(object sender, EventArgs e)

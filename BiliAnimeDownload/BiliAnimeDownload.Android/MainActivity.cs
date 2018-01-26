@@ -1,11 +1,14 @@
 ﻿using System;
 
 using Android.App;
+using Android.Support.V4.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Plugin.Permissions;
+
 
 namespace BiliAnimeDownload.Droid
 {
@@ -22,7 +25,25 @@ namespace BiliAnimeDownload.Droid
             global::Xamarin.Forms.Forms.Init(this, bundle);
             //global::Xamarin.Forms.Forms.SetTitleBarVisibility(Xamarin.Forms.AndroidTitleBarVisibility.Never);
             LoadApplication(new App());
+
+           
+
+
         }
+
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        {
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+
+
     }
+
+
+
+
 }
 

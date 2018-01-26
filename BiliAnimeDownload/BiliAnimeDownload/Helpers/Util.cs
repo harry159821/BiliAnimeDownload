@@ -2,6 +2,7 @@
 using BiliAnimeDownload.Models;
 using Flurl.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +52,7 @@ namespace BiliAnimeDownload.Helpers
 
         }
 
-        public async static Task<List<segment_listModel>> GetVideoUrl(string cid, string referer, int quality)
+        public async static Task<List<segment_listModel>> GetVideoUrl(string cid, string referer, int quality,string banId,int index)
         {
             try
             {
@@ -73,7 +74,8 @@ namespace BiliAnimeDownload.Helpers
                     var re = await flurlClient.GetStringAsync();
 
                     FlvPlyaerUrlModel m = JsonConvert.DeserializeObject<FlvPlyaerUrlModel>(re);
-                    if (m.code == 0)
+                    // 港澳台的视频会返回一个版权受限的15秒视频，8986943.mp4，出现这个算失败，继续读取
+                    if (m.code == 0&&!re.Contains("8986943"))
                     {
                         foreach (var item in m.durl)
                         {
@@ -87,8 +89,29 @@ namespace BiliAnimeDownload.Helpers
                     }
                     else
                     {
-                        Util.ShowShortToast("无法读取到下载地址");
-                        return new List<segment_listModel>();
+                        //换个API继续读取下载地址
+                        flurlClient.Url = Api._playurlApi3(banId, index);
+                        var re2 = await flurlClient.GetStringAsync();
+                        JObject obj = JObject.Parse(re2);
+                        if (Convert.ToInt32(obj["code"].ToString()) == 0)
+                        {
+                            var urls = JsonConvert.DeserializeObject<List<string>>(obj["results"].ToString());
+
+                            foreach (var item in urls)
+                            {
+                                segment_list.Add(new segment_listModel()
+                                {
+                                    url = item,
+                                    bytes = 233333333,//无法知道大小，随便写个233 - -
+                                    duration = 0
+                                });
+                            }
+                        }
+                        else
+                        {
+                            Util.ShowShortToast("无法读取到下载地址");
+                            return new List<segment_listModel>();
+                        }
                     }
 
                 }

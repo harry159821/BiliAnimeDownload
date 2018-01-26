@@ -39,7 +39,7 @@
         <ListView Grid.Row="1" x:Name="ls_Video" Margin="8,4,8,8" IsVisible="False" ItemsSource="{Binding pages}"
             RowHeight ="48"
              IsPullToRefreshEnabled="False"
-                 ItemSelected="ls_ItemSelected"
+           ItemSelected="ls_ItemSelected"
             CachingStrategy="RecycleElement">
             <ListView.ItemTemplate>
                 <DataTemplate >

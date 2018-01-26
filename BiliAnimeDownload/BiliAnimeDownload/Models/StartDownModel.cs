@@ -11,7 +11,8 @@ namespace BiliAnimeDownload
     {
         release = 0,//正式版
         blue = 1,   //概念版
-        white = 2,   //哔哩哔哩白
+        play = 2,   //Play商店版
+       
     }
     public enum VideoType
     {

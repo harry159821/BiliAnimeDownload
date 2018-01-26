@@ -67,11 +67,9 @@ namespace BiliAnimeDownload.Droid
             try
             {
 
-                var biliPath = startDownModel.downPath + "/tv.danmaku.bili/download/";
-                if (startDownModel.clientType == ClientType.blue)
-                {
-                    biliPath = startDownModel.downPath + "/com.bilibili.app.blue/download/";
-                }
+                var biliPath = startDownModel.downPath + GetLocalPath(startDownModel.clientType);
+               
+
                 Java.IO.File bilidirv = new Java.IO.File(biliPath);
                 if (!bilidirv.Exists())
                 {
@@ -117,11 +115,7 @@ namespace BiliAnimeDownload.Droid
         {
             try
             {
-                var biliPath = startDownModel.downPath + "/tv.danmaku.bili/download/";
-                if (startDownModel.clientType == ClientType.blue)
-                {
-                    biliPath = startDownModel.downPath + "/com.bilibili.app.blue/download/";
-                }
+                var biliPath = startDownModel.downPath + GetLocalPath(startDownModel.clientType);
                 Java.IO.File bilidirv = new Java.IO.File(biliPath);
                 if (!bilidirv.Exists())
                 {
@@ -179,12 +173,8 @@ namespace BiliAnimeDownload.Droid
         {
             try
             {
-               
-                var biliPath = startDownModel.downPath+"/tv.danmaku.bili/download/";
-                if (startDownModel.clientType == ClientType.blue)
-                {
-                    biliPath = startDownModel.downPath + "/com.bilibili.app.blue/download/";
-                }
+
+                var biliPath = startDownModel.downPath + GetLocalPath(startDownModel.clientType);
                 Java.IO.File bilidirv = new Java.IO.File(biliPath);
                 if (!bilidirv.Exists())
                 {
@@ -231,11 +221,7 @@ namespace BiliAnimeDownload.Droid
         {
             try
             {
-                var biliPath = startDownModel.downPath + "/tv.danmaku.bili/download/";
-                if (startDownModel.clientType == ClientType.blue)
-                {
-                    biliPath = startDownModel.downPath + "/com.bilibili.app.blue/download/";
-                }
+                var biliPath = startDownModel.downPath + GetLocalPath(startDownModel.clientType);
                 Java.IO.File bilidirv = new Java.IO.File(biliPath);
                 if (!bilidirv.Exists())
                 {
@@ -287,6 +273,22 @@ namespace BiliAnimeDownload.Droid
             catch (Exception ex)
             {
                 return new MsgModel() { code = ex.HResult, message = "任务创建失败，出现了未处理错误\r\n" + ex.Message };
+            }
+        }
+
+
+        private string GetLocalPath(ClientType clientType)
+        {
+            switch (clientType)
+            {
+                case ClientType.release:
+                    return "/tv.danmaku.bili/download/";
+                case ClientType.blue:
+                    return  "/com.bilibili.app.blue/download/";
+                case ClientType.play:
+                    return "/com.bilibili.app.in/download/";
+                default:
+                    return "/tv.danmaku.bili/download/";
             }
         }
 

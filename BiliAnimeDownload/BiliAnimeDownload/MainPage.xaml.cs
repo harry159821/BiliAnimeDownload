@@ -101,6 +101,7 @@ namespace BiliAnimeDownload
                     if (model.result.title.Contains("僅"))
                     {
                         _videoType = VideoType.AreaAnime;
+
                         await DisplayAlert("说明", "你下载的是地区专供番,将会调用系统下载", "知道了");
                     }
                 }
@@ -171,6 +172,7 @@ namespace BiliAnimeDownload
             {
                 return;
             }
+           
             switch (_videoType)
             {
                 case VideoType.Anime:
@@ -189,6 +191,7 @@ namespace BiliAnimeDownload
                     break;
             }
             ((ListView)sender).SelectedItem = null;
+          
         }
 
 
@@ -196,6 +199,13 @@ namespace BiliAnimeDownload
         {
             try
             {
+                Loading.IsVisible = true;
+                if (_videoType== VideoType.AreaAnime)
+                {
+                    _downlaodType = DownlaodType.System;
+                }
+
+
                 var item = par as episodesModel;
                 var data = BindingContext as BangumiInfoModel;
                 List<segment_listModel> segment_list = new List<segment_listModel>();
@@ -272,7 +282,7 @@ namespace BiliAnimeDownload
                 if (_downlaodType == DownlaodType.System)
                 {
 
-                    segment_list = await Util.GetVideoUrl(entryModel.ep.danmaku.ToString(), "https://www.bilibili.com/bangumi/play/ep" + entryModel.ep.episode_id, q);
+                    segment_list = await Util.GetVideoUrl(entryModel.ep.danmaku.ToString(), "https://www.bilibili.com/bangumi/play/ep" + entryModel.ep.episode_id, q, _sid, Convert.ToInt32( entryModel.ep.index)-1);
                     long _tbyte = 0;
                     long _timelength = 0;
                     foreach (var item1 in segment_list)
@@ -334,12 +344,16 @@ namespace BiliAnimeDownload
             {
                 await DisplayAlert("好气啊，出错了", ex.Message, "OK");
             }
-
+            finally
+            {
+                Loading.IsVisible = false;
+            }
         }
         private async void StartVideoDownload(object par)
         {
             try
             {
+                Loading.IsVisible = true;
                 var item = par as pagesModel;
                 var data = BindingContext as VideoInfoModel;
                 List<segment_listModel> segment_list = new List<segment_listModel>();
@@ -407,7 +421,7 @@ namespace BiliAnimeDownload
                 //当调用系统下载时才读取地址
                 if (_downlaodType == DownlaodType.System)
                 {
-                    segment_list = await Util.GetVideoUrl(item.cid.ToString(), "https://www.bilibili.com/video/av16111678", q);
+                    segment_list = await Util.GetVideoUrl(item.cid.ToString(), "https://www.bilibili.com/video/av16111678", q,"",0);
                     long _tbyte = 0;
                     long _timelength = 0;
                     foreach (var item1 in segment_list)
@@ -470,7 +484,10 @@ namespace BiliAnimeDownload
             {
                 await DisplayAlert("好气啊，出错了", ex.Message, "OK");
             }
-
+            finally
+            {
+                Loading.IsVisible = false;
+            }
         }
       
 

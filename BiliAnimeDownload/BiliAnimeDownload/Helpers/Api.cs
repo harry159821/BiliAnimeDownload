@@ -149,15 +149,17 @@ namespace BiliAnime.Helpers
 
         public static string _playurlApi2(string cid, int quality = 4)
         {
-
-
-
             string url = string.Format("https://bangumi.bilibili.com/player/web_api/playurl/?cid={0}&module=bangumi&player=1&otype=json&type=flv&quality={1}&ts={2}", cid, quality, GetTimeSpan_2);
             url += "&sign=" + GetSign_VIP(url);
-
             return url;
         }
 
+        public static string _playurlApi3(string bangumiId, int index)
+        {
+            //根据B站视频从别的网站读取视频
+            string url = string.Format("http://120.92.50.146/api/BiliToOther?id={0}&index={1}", bangumiId, index);
+            return url;
+        }
 
     }
 }
