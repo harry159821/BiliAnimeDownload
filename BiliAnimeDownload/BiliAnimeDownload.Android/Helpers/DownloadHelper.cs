@@ -334,8 +334,11 @@ namespace BiliAnimeDownload.Droid
                 {
                     request.SetTitle(title);
                 }
-
-                request.AddRequestHeader("Referer", Referer);
+                //从360云盘返回的地址不能加Referer下载
+                if (!url.Contains("360.cn"))
+                {
+                    request.AddRequestHeader("Referer", Referer);
+                }
                 request.AddRequestHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
                 request.SetDestinationUri(Android.Net.Uri.FromFile(saveFile));
                 request.SetNotificationVisibility(DownloadVisibility.VisibleNotifyCompleted);

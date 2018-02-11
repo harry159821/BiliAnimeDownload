@@ -151,13 +151,23 @@ namespace BiliAnime.Helpers
         {
             string url = string.Format("https://bangumi.bilibili.com/player/web_api/playurl/?cid={0}&module=bangumi&player=1&otype=json&type=flv&quality={1}&ts={2}", cid, quality, GetTimeSpan_2);
             url += "&sign=" + GetSign_VIP(url);
+
+            //https://www.biliplus.com/BPplayurl.php?cid=30751001|bangumi&otype=json&type=&quality=112&module=bangumi&season_type=1&qn=112
+
+
             return url;
         }
 
         public static string _playurlApi3(string bangumiId, int index)
         {
-            //根据B站视频从别的网站读取视频
+            //从自建服务器上读取
             string url = string.Format("http://120.92.50.146/api/BiliToOther?id={0}&index={1}", bangumiId, index);
+            return url;
+        }
+        public static string _playurlApi4(string bangumiId, string cid,string epid)
+        {
+            //从自建服务器上读取
+            string url = string.Format("http://120.92.50.146/23moe/api/v1/BiliAnimeUrl?animeid={0}&cid={1}&epid={2}", bangumiId, cid, epid);
             return url;
         }
 

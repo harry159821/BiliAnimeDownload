@@ -216,26 +216,31 @@ namespace BiliAnimeDownload
                 int q = 3;
                 //转换下清晰度
                 var quality = "lua.flv720.bb2api.64";
+                var video_quality = 112;
                 switch (SettingHelper.GetQuality())
                 {
                     case 0:
                         quality = "lua.hdflv2.bb2api.bd";
                         description = "1080P";
                         q = 4;
+                        video_quality = 112;
                         break;
                     case 1:
                         quality = "lua.flv.bb2api.80";
                         description = "超清";
+                        video_quality = 80;
                         q = 3;
                         break;
                     case 2:
                         quality = "lua.flv720.bb2api.64";
                         description = "高清";
+                        video_quality = 64;
                         q = 2;
                         break;
                     case 3:
                         quality = "lua.mp4.bb2api.16";
                         description = "清晰";
+                        video_quality = 16;
                         q = 1;
                         break;
                     default:
@@ -251,6 +256,7 @@ namespace BiliAnimeDownload
                     type_tag = quality,
                     time_create_stamp = Api.GetTimeSpan_2,
                     time_update_stamp = Api.GetTimeSpan_2,
+                    prefered_video_quality= video_quality,
                     source = new sourceModel()
                     {
                         av_id = long.Parse(item.aid),
@@ -489,8 +495,6 @@ namespace BiliAnimeDownload
                 Loading.IsVisible = false;
             }
         }
-      
-
         private void menu_setting_Clicked(object sender, EventArgs e)
         {
             this.Navigation.PushAsync(new SettingPage());

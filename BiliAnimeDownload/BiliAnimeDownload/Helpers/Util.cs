@@ -90,20 +90,19 @@ namespace BiliAnimeDownload.Helpers
                     else
                     {
                         //换个API继续读取下载地址
-                        flurlClient.Url = Api._playurlApi3(banId, index);
+                        flurlClient.Url = Api._playurlApi4(banId, cid,"");
                         var re2 = await flurlClient.GetStringAsync();
                         JObject obj = JObject.Parse(re2);
                         if (Convert.ToInt32(obj["code"].ToString()) == 0)
                         {
-                            var urls = JsonConvert.DeserializeObject<List<string>>(obj["results"].ToString());
-
-                            foreach (var item in urls)
+                            //var urls = JsonConvert.DeserializeObject<List<string>>(obj["data"].ToString());
+                            foreach (var item in obj["data"])
                             {
                                 segment_list.Add(new segment_listModel()
                                 {
-                                    url = item,
-                                    bytes = 233333333,//无法知道大小，随便写个233 - -
-                                    duration = 0
+                                    url = item["url"].ToString(),
+                                    bytes = Convert.ToInt64(item["size"].ToString()),
+                                    duration = Convert.ToInt64(item["length"].ToString())
                                 });
                             }
                         }
@@ -135,7 +134,7 @@ namespace BiliAnimeDownload.Helpers
             }
             catch (Exception)
             {
-                Util.ShowShortToast("无法读取到下载地址");
+                Util.ShowShortToast("无法读取到下载地址\r\n可能是服务器正在缓存此视频，请稍后再试");
                 return new List<segment_listModel>();
             }
 
