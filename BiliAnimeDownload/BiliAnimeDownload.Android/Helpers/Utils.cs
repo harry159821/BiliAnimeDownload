@@ -28,6 +28,8 @@ namespace BiliAnimeDownload.Droid
             }
             catch (Exception ex)
             {
+                
+
                 Toast.MakeText(Android.App.Application.Context, "打不开链接："+ url, ToastLength.Long).Show();
                
             }

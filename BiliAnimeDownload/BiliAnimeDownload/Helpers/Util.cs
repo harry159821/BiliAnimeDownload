@@ -1,5 +1,6 @@
 ﻿using BiliAnime.Helpers;
 using BiliAnimeDownload.Models;
+using BiliAnimeDownload.Views;
 using Flurl.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -177,10 +178,45 @@ namespace BiliAnimeDownload.Helpers
         }
        
 
+        public static void SaveHistroy(HistroyModel histroy)
+        {
+            //懒得用sql lite 了...
+            var ls = new List<HistroyModel>();
+            var str = GetSetting("histroy");
+            if (str!="")
+            {
+                ls = Newtonsoft.Json.JsonConvert.DeserializeObject<List<HistroyModel>>(str);
+            }
+            var existitem = ls.Find(x => x.id == histroy.id);
+            if (existitem != null)
+            {
+                existitem.date = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            }
+            else
+            {
+                ls.Add(histroy);
+            }
+           
+            SavaSetting("histroy", JsonConvert.SerializeObject(ls));
+        }
+        public static List<HistroyModel> GetHistroy()
+        {
+            var str = GetSetting("histroy");
+            var ls = Newtonsoft.Json.JsonConvert.DeserializeObject<List<HistroyModel>>(str);
+            return ls;
+        }
+
+
+
         public static MsgModel StartDownload(StartDownModel m)
         {
+           
             return DependencyService.Get<IDownloadHelper>().StartDownload(m);
         }
+
+
+
+
 
 
     }

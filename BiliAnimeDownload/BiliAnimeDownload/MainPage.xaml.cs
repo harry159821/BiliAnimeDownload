@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Flurl.Http;
-using Android.App;
+//using Android.App;
 using BiliAnimeDownload.Models;
 using BiliAnimeDownload.Helpers;
 using BiliAnimeDownload.Views;
@@ -20,11 +20,28 @@ namespace BiliAnimeDownload
 {
     public partial class MainPage : ContentPage
     {
+        public event EventHandler<string> GetAnimeInfo;
+       
         public MainPage()
         {
             InitializeComponent();
+            GetAnimeInfo += MainPage_GetAnimeInfo;
+        }
+        public void DoGetAnimeInfo(string id)
+        {
+            if (GetAnimeInfo != null)
+            {
+                GetAnimeInfo(null, id);
+            }
         }
 
+        private void MainPage_GetAnimeInfo(object sender, string e)
+        {
+            txt_Sid.Text = e;
+            btn_Go_Clicked(null, null);
+        }
+
+        
         protected async override void OnAppearing()
         {
             base.OnAppearing();
@@ -104,6 +121,12 @@ namespace BiliAnimeDownload
 
                         await DisplayAlert("说明", "你下载的是地区专供番,将会调用系统下载", "知道了");
                     }
+                    Util.SaveHistroy(new HistroyModel() {
+                         date= DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
+                         id= _sid,
+                         name= model.result.title,
+                         type="anime"
+                    });
                 }
                 else
                 {
@@ -148,6 +171,13 @@ namespace BiliAnimeDownload
                             _videoType = VideoType.VipMovie;
                         }
                     }
+                    Util.SaveHistroy(new HistroyModel()
+                    {
+                        date = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
+                        id = "av"+_aid,
+                        name = model.data.title,
+                        type = "video"
+                    });
                 }
                 else
                 {
@@ -504,11 +534,19 @@ namespace BiliAnimeDownload
         {
             this.Navigation.PushAsync(new HelpPage());
         }
+        
+        private  void menu_histroy_Clicked(object sender, EventArgs e)
+        {
+           
+             this.Navigation.PushAsync(new HistroyPage());
+            
+        }
+
+        private  void menu_download_Clicked(object sender, EventArgs e)
+        {
+             this.Navigation.PushAsync(new DownloadPage());
+        }
     }
-
-
-
-
 
 
 

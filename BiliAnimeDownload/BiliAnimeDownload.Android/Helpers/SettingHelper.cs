@@ -67,7 +67,6 @@ namespace BiliAnimeDownload.Droid
             }
 
         }
-
         public void PickFolder()
         {
             try
