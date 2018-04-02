@@ -21,11 +21,19 @@ namespace BiliAnimeDownload.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            //List<HistroyModel> ls = new List<HistroyModel>() {
-            //     new HistroyModel(){name="国家队",date="2018/03/13",id="21680",type="anime"},
-            //};
-            var historys =Util.GetHistroy().OrderByDescending(x=>Convert.ToDateTime(x.date));
-            lv.ItemsSource = historys;
+            try
+            {
+                var ls = Util.GetHistroy();
+
+                if (ls.Count != 0)
+                {
+                    lv.ItemsSource = ls.OrderByDescending(x => Convert.ToDateTime(x.date));
+                }
+            }
+            catch (Exception)
+            {
+            }
+          
         }
    
         private  void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)

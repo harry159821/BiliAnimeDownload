@@ -66,7 +66,7 @@ namespace BiliAnimeDownload
         DownlaodType _downlaodType = DownlaodType.Bilibili;
         string _sid = "";
         string _aid = "";
-        private void btn_Go_Clicked(object sender, EventArgs e)
+        private async void btn_Go_Clicked(object sender, EventArgs e)
         {
             if (txt_Sid.Text.Length == 0)
             {
@@ -84,7 +84,15 @@ namespace BiliAnimeDownload
             }
             else
             {
-                _sid = Regex.Match(txt_Sid.Text, @"\d{1,9}", RegexOptions.Singleline).Groups[0].Value;
+                if (txt_Sid.Text.Contains("ep"))
+                {
+                    _sid = await Util.BangumiEpidToSid(Regex.Match(txt_Sid.Text, @"\d{1,9}", RegexOptions.Singleline).Groups[0].Value);
+                }
+                else
+                {
+                    _sid = Regex.Match(txt_Sid.Text, @"\d{1,9}", RegexOptions.Singleline).Groups[0].Value;
+                }
+                
                 _videoType = VideoType.Anime;
                 BindingContext = null;
                 ls.IsVisible = true;
