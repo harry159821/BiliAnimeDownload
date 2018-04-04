@@ -47,7 +47,7 @@ namespace BiliAnimeDownload.Droid
             catch (Exception ex)
             {
                 Toast.MakeText(Forms.Context, "为什么读个设置都会出错啊！\r\n"+ex.Message, ToastLength.Long);
-                return "";
+                return "[]";
             }
           
         }
@@ -67,7 +67,6 @@ namespace BiliAnimeDownload.Droid
             }
 
         }
-
         public void PickFolder()
         {
             try

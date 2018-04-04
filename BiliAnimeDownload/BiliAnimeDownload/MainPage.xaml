@@ -4,11 +4,11 @@
              xmlns:local="clr-namespace:BiliAnimeDownload"
              x:Class="BiliAnimeDownload.MainPage">
     <ContentPage.ToolbarItems>
+        <!--<ToolbarItem Icon="download_1.png" x:Name="menu_download"  Clicked="menu_download_Clicked"></ToolbarItem>-->
+        <ToolbarItem Icon="history.png" x:Name="menu_histroy" Clicked="menu_histroy_Clicked"></ToolbarItem>
         <ToolbarItem Text="如何使用" x:Name="menu_help" Clicked="menu_help_Clicked" Order="Secondary" />
         <ToolbarItem Text="设置" x:Name="menu_setting" Clicked="menu_setting_Clicked" Order="Secondary" />
-      
     </ContentPage.ToolbarItems>
-    
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -52,7 +52,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
         <ActivityIndicator IsVisible="False" Grid.RowSpan="2" Margin="0,48,0,0" Color="{StaticResource Key=Primary}" IsRunning="true" x:Name="Loading" WidthRequest="56" HeightRequest="56" VerticalOptions="Center" HorizontalOptions="Center"/>
     </Grid>
 

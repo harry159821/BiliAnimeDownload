@@ -141,7 +141,7 @@ namespace BiliAnime.Helpers
                     break;
             }
 
-            string url = string.Format("https://interface.bilibili.com/playurl?cid={0}&player=1&quality={1}&qn={1}&ts={2}", cid, qn, GetTimeSpan);
+            string url = string.Format("http://interface.bilibili.com/v2/playurl?cid={0}&player=1&quality={1}&qn={1}&ts={2}", cid, qn, GetTimeSpan);
             url += "&sign=" + GetSign_PlayUrl(url);
 
             return url;

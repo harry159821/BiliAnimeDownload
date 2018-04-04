@@ -44,8 +44,8 @@
                     <Label Text="*有些番剧没有1080P,选择客户端下载时需要大会员登录才能下1080P" />
                     <Picker Title="选择清晰度" x:Name="cb_Q" SelectedIndexChanged="cb_Q_SelectedIndexChanged">
                         <Picker.Items>
+                            <x:String>1080P+</x:String>
                             <x:String>1080P</x:String>
-                            <x:String>超清</x:String>
                             <x:String>高清</x:String>
                             <x:String>流畅</x:String>
                         </Picker.Items>

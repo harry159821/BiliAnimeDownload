@@ -1,5 +1,6 @@
 ﻿using BiliAnime.Helpers;
 using BiliAnimeDownload.Models;
+using BiliAnimeDownload.Views;
 using Flurl.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -139,6 +140,41 @@ namespace BiliAnimeDownload.Helpers
             }
 
         }
+
+
+         /// <summary>
+        /// 根据Epid取番剧ID
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<string> BangumiEpidToSid(string url)
+        {
+            try
+            {
+                if (!url.Contains("http"))
+                {
+                    url = "https://www.bilibili.com/bangumi/play/ep"+ url;
+                }
+
+                Flurl.Http.FlurlClient flurlClient = new FlurlClient(url);
+                var re = await flurlClient.GetStringAsync();
+                var data= Regex.Match(re, @"ss(\d+)").Groups[1].Value;
+                if (data!="")
+                {
+                    return data;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+                return "";
+            }
+        }
+
+
         public static void ShowLongToast(string message)
         {
             DependencyService.Get<IShowToast>().LongAlert(message);
@@ -177,10 +213,56 @@ namespace BiliAnimeDownload.Helpers
         }
        
 
+        public static void SaveHistroy(HistroyModel histroy)
+        {
+            //懒得用sql lite 了...
+            var ls = new List<HistroyModel>();
+            var str = GetSetting("histroy");
+            if (str!="")
+            {
+                ls = Newtonsoft.Json.JsonConvert.DeserializeObject<List<HistroyModel>>(str);
+            }
+            var existitem = ls.Find(x => x.id == histroy.id);
+            if (existitem != null)
+            {
+                existitem.date = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            }
+            else
+            {
+                ls.Add(histroy);
+            }
+           
+            SavaSetting("histroy", JsonConvert.SerializeObject(ls));
+        }
+        public static List<HistroyModel> GetHistroy()
+        {
+            List<HistroyModel> histroys = new List<HistroyModel>();
+            try
+            {
+                var str = GetSetting("histroy");
+                if (str != null && str != "")
+                {
+                    histroys = Newtonsoft.Json.JsonConvert.DeserializeObject<List<HistroyModel>>(str);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            
+            return histroys;
+        }
+
+
+
         public static MsgModel StartDownload(StartDownModel m)
         {
+           
             return DependencyService.Get<IDownloadHelper>().StartDownload(m);
         }
+
+
+
+
 
 
     }
